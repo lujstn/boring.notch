@@ -20,6 +20,7 @@ struct ContentView: View {
 
     @ObservedObject var coordinator = BoringViewCoordinator.shared
     @ObservedObject var musicManager = MusicManager.shared
+    @ObservedObject var timerVM = TimerViewModel.shared
     @ObservedObject var batteryModel = BatteryStatusViewModel.shared
     @ObservedObject var brightnessManager = BrightnessManager.shared
     @ObservedObject var volumeManager = VolumeManager.shared
@@ -88,10 +89,19 @@ struct ContentView: View {
     private var computedChinWidth: CGFloat {
         var chinWidth: CGFloat = vm.closedNotchSize.width
 
-        if coordinator.expandingView.type == .battery && coordinator.expandingView.show
+        // Alert takes priority over all other width calculations
+        if coordinator.alert.show && vm.notchState == .closed {
+            chinWidth = 640
+        } else if coordinator.expandingView.type == .battery && coordinator.expandingView.show
             && vm.notchState == .closed && Defaults[.showPowerStatusNotifications]
         {
             chinWidth = 640
+        } else if vm.notchState == .closed
+            && (timerVM.timerState == .running || timerVM.timerState == .paused)
+            && !coordinator.alert.show && !vm.hideOnClosed
+        {
+            // Timer chin expansion: icon (24) + text (40) + padding (16)
+            chinWidth += 80
         } else if (!coordinator.expandingView.show || coordinator.expandingView.type == .music)
             && vm.notchState == .closed && (musicManager.isPlaying || !musicManager.isPlayerIdle)
             && coordinator.musicLiveActivityEnabled && !vm.hideOnClosed
@@ -158,6 +168,8 @@ struct ContentView: View {
                         handleHover(hovering)
                     }
                     .onTapGesture {
+                        // Block tap when alert is active
+                        guard !coordinator.alert.show else { return }
                         doOpen()
                     }
                     .conditionalModifier(Defaults[.enableGestures]) { view in
@@ -282,6 +294,7 @@ struct ContentView: View {
     @ViewBuilder
     func NotchLayout() -> some View {
         VStack(alignment: .leading) {
+            // DEBUG: Blue border on outer VStack
             VStack(alignment: .leading) {
                 if coordinator.helloAnimationRunning {
                     Spacer()
@@ -294,7 +307,11 @@ struct ContentView: View {
                     .padding(.top, 40)
                     Spacer()
                 } else {
-                    if coordinator.expandingView.type == .battery && coordinator.expandingView.show
+                    // Alert takes highest priority
+                    if coordinator.alert.show && vm.notchState == .closed {
+                        NotchAlertView(alert: $coordinator.alert)
+                            .frame(height: vm.effectiveClosedNotchHeight, alignment: .center)
+                    } else if coordinator.expandingView.type == .battery && coordinator.expandingView.show
                         && vm.notchState == .closed && Defaults[.showPowerStatusNotifications]
                     {
                         HStack(spacing: 0) {
@@ -332,6 +349,9 @@ struct ContentView: View {
                               gestureProgress: $gestureProgress
                           )
                               .transition(.opacity)
+                      } else if vm.notchState == .closed && (timerVM.timerState == .running || timerVM.timerState == .paused) && !coordinator.alert.show && !vm.hideOnClosed {
+                          TimerLiveActivity()
+                              .frame(alignment: .center)
                       } else if (!coordinator.expandingView.show || coordinator.expandingView.type == .music) && vm.notchState == .closed && (musicManager.isPlaying || !musicManager.isPlayerIdle) && coordinator.musicLiveActivityEnabled && !vm.hideOnClosed {
                           MusicLiveActivity()
                               .frame(alignment: .center)
@@ -403,8 +423,12 @@ struct ContentView: View {
                         )
                     case .shelf:
                         ShelfView()
+                    case .timer:
+                        TimerView()
                     }
                 }
+                // DEBUG: Red border on tab content VStack
+                .border(Color.red, width: 2)
                 .transition(
                     .scale(scale: 0.8, anchor: .top)
                     .combined(with: .opacity)
@@ -568,6 +592,8 @@ struct ContentView: View {
 
     private func handleHover(_ hovering: Bool) {
         if coordinator.firstLaunch { return }
+        // Block hover when alert is active
+        if coordinator.alert.show { return }
         hoverTask?.cancel()
         
         if hovering {

@@ -200,7 +200,13 @@ class BoringViewModel: NSObject, ObservableObject {
 
         self.notchSize = openNotchSize
         self.notchState = .open
-        
+
+        // Auto-navigate to timer tab if timer is active
+        if TimerViewModel.shared.timerState == .running ||
+           TimerViewModel.shared.timerState == .paused {
+            coordinator.currentView = .timer
+        }
+
         // Force music information update when notch is opened
         MusicManager.shared.forceUpdate()
 

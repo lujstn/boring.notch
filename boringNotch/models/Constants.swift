@@ -348,4 +348,12 @@ extension Defaults.Keys {
     }
 
     static let didClearLegacyURLCacheV1 = Key<Bool>("didClearLegacyURLCache_v1", default: false)
+
+    // MARK: Timer
+    static let timerSoundEnabled = Key<Bool>("timerSoundEnabled", default: true)
+    static let timerSnoozeEnabled = Key<Bool>("timerSnoozeEnabled", default: true)
+    static let timerSnoozeIntervals = Key<[Int]>("timerSnoozeIntervals", default: [5, 10, 15])
+    static let timerOutlineEnabled = Key<Bool>("timerOutlineEnabled", default: true)
+    static let timerOutlineColor = Key<String>("timerOutlineColor", default: "orange")
+    static let timerShowInCollapsed = Key<Bool>("timerShowInCollapsed", default: true)
 }

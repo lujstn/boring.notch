@@ -410,7 +410,27 @@ class BoringViewCoordinator: ObservableObject {
             }
         }
     }
-    
+
+    // MARK: - Alert
+
+    @Published var alert: NotchAlert = .init()
+
+    func showAlert(_ alert: NotchAlert) {
+        Task { @MainActor in
+            withAnimation(.smooth) {
+                self.alert = alert
+            }
+        }
+    }
+
+    func dismissAlert() {
+        Task { @MainActor in
+            withAnimation(.smooth) {
+                self.alert = NotchAlert()
+            }
+        }
+    }
+
     func showEmpty() {
         currentView = .home
     }
