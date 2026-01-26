@@ -2,7 +2,7 @@
 //  TimerSoundPlayer.swift
 //  boringNotch
 //
-//  Created on 2026-01-26.
+//  Created by Lucas Johnston Kurilov (@lujstn) on 2026-01-26.
 //
 
 import AppKit

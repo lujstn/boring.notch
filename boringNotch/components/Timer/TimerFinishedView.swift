@@ -2,7 +2,7 @@
 //  TimerFinishedView.swift
 //  boringNotch
 //
-//  Created on 2026-01-22.
+//  Created by Lucas Johnston Kurilov (@lujstn) on 2026-01-22.
 //
 
 import Defaults
