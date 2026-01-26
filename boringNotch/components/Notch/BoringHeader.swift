@@ -16,7 +16,11 @@ struct BoringHeader: View {
     var body: some View {
         HStack(spacing: 0) {
             HStack {
-                if (!tvm.isEmpty || coordinator.alwaysShowTabs) && Defaults[.boringShelf] {
+                // Show tab bar when there are 2+ tabs:
+                // - Timer enabled (always shows timer tab), OR
+                // - Shelf enabled AND (has items OR always show tabs)
+                let shouldShowTabs = Defaults[.timerEnabled] || (Defaults[.boringShelf] && (!tvm.isEmpty || coordinator.alwaysShowTabs))
+                if shouldShowTabs {
                     TabSelectionView()
                 } else if vm.notchState == .open {
                     EmptyView()

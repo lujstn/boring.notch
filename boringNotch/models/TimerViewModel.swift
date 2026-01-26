@@ -21,6 +21,13 @@ class TimerViewModel: ObservableObject {
     @Published var totalSeconds: Int = 0
     @Published var remainingSeconds: Int = 0
 
+    // Picker state persistence (survives view recreation for 20 seconds)
+    private(set) var pendingHours: Int = 0
+    private(set) var pendingMinutes: Int = 5
+    private(set) var pendingSeconds: Int = 0
+    private var pendingLastModified: Date?
+    private let pendingExpirationSeconds: TimeInterval = 20
+
     private var timerCancellable: AnyCancellable?
 
     var progress: Double {
@@ -58,6 +65,27 @@ class TimerViewModel: ObservableObject {
 
     private init() {}
 
+    // MARK: - Picker State Persistence
+
+    /// Save picker values when user makes changes
+    func savePendingTime(hours: Int, minutes: Int, seconds: Int) {
+        pendingHours = hours
+        pendingMinutes = minutes
+        pendingSeconds = seconds
+        pendingLastModified = Date()
+    }
+
+    /// Check if pending values are still valid (within 20 seconds)
+    var hasPendingTime: Bool {
+        guard let lastModified = pendingLastModified else { return false }
+        return Date().timeIntervalSince(lastModified) < pendingExpirationSeconds
+    }
+
+    /// Clear pending state (e.g., after starting timer)
+    func clearPendingTime() {
+        pendingLastModified = nil
+    }
+
     func start(hours: Int, minutes: Int, seconds: Int) {
         let total = hours * 3600 + minutes * 60 + seconds
         guard total > 0 else { return }
@@ -82,6 +110,7 @@ class TimerViewModel: ObservableObject {
 
     func stop() {
         timerCancellable?.cancel()
+        TimerSoundPlayer.shared.stop()
         // Dismiss alert if showing (edge case: stopped while alert visible)
         BoringViewCoordinator.shared.dismissAlert()
         timerState = .idle
@@ -91,6 +120,7 @@ class TimerViewModel: ObservableObject {
 
     func snooze(minutes: Int) {
         guard timerState == .finished else { return }
+        TimerSoundPlayer.shared.stop()
         // Dismiss alert first
         BoringViewCoordinator.shared.dismissAlert()
         let additional = minutes * 60
@@ -102,6 +132,7 @@ class TimerViewModel: ObservableObject {
 
     func dismiss() {
         timerCancellable?.cancel()
+        TimerSoundPlayer.shared.stop()
         // Dismiss alert
         BoringViewCoordinator.shared.dismissAlert()
         timerState = .idle
@@ -128,7 +159,7 @@ class TimerViewModel: ObservableObject {
 
     private func playCompletionSound() {
         guard Defaults[.timerSoundEnabled] else { return }
-        NSSound.beep()
+        TimerSoundPlayer.shared.playTimerSound()
     }
 
     private func expandNotch() {

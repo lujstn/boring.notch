@@ -13,10 +13,10 @@ struct NotchAlertView: View {
     @State private var isPulsing: Bool = false
 
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: 10) {
             // Icon
             Image(systemName: alert.icon)
-                .font(.system(size: 20, weight: .semibold))
+                .font(.system(size: 16, weight: .medium))
                 .foregroundStyle(alert.accentColor)
                 .opacity(alert.pulseAnimation ? (isPulsing ? 0.4 : 1.0) : 1.0)
                 .animation(
@@ -28,7 +28,7 @@ struct NotchAlertView: View {
 
             // Title
             Text(alert.title)
-                .font(.system(size: 14, weight: .bold))
+                .font(.system(size: 14, weight: .medium))
                 .foregroundStyle(.white)
 
             // Message
@@ -39,24 +39,20 @@ struct NotchAlertView: View {
             Spacer()
 
             // Action buttons
-            HStack(spacing: 8) {
+            HStack(spacing: 6) {
                 ForEach(alert.actions) { action in
                     Button(action: {
                         action.action()
                     }) {
                         Text(action.label)
                             .font(.system(size: 12, weight: .medium))
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 6)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 3)
                             .foregroundStyle(action.style == .primary ? .white : alert.accentColor)
                             .background(
                                 action.style == .primary
                                     ? alert.accentColor
-                                    : Color.clear
-                            )
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 6)
-                                    .stroke(alert.accentColor, lineWidth: action.style == .secondary ? 1 : 0)
+                                    : alert.accentColor.opacity(0.15)
                             )
                             .clipShape(RoundedRectangle(cornerRadius: 6))
                     }
@@ -64,8 +60,8 @@ struct NotchAlertView: View {
                 }
             }
         }
-        .padding(.horizontal, 16)
-        .frame(height: 36)
+        .padding(.horizontal, 10)
+        .frame(maxHeight: .infinity, alignment: .center)
         .onAppear {
             if alert.pulseAnimation {
                 isPulsing = true

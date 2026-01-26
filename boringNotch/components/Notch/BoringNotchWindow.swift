@@ -8,6 +8,9 @@
 import Cocoa
 
 class BoringNotchWindow: NSPanel {
+    /// When true, allows this window to become key for keyboard input
+    var allowsKeyboardInput: Bool = false
+
     override init(
         contentRect: NSRect,
         styleMask: NSWindow.StyleMask,
@@ -20,30 +23,30 @@ class BoringNotchWindow: NSPanel {
             backing: backing,
             defer: flag
         )
-        
+
         isFloatingPanel = true
         isOpaque = false
         titleVisibility = .hidden
         titlebarAppearsTransparent = true
         backgroundColor = .clear
         isMovable = false
-        
+
         collectionBehavior = [
             .fullScreenAuxiliary,
             .stationary,
             .canJoinAllSpaces,
             .ignoresCycle,
         ]
-        
+
         isReleasedWhenClosed = false
         level = .mainMenu + 3
         hasShadow = false
     }
-    
+
     override var canBecomeKey: Bool {
-        false
+        allowsKeyboardInput
     }
-    
+
     override var canBecomeMain: Bool {
         false
     }

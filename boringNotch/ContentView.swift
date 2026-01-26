@@ -149,6 +149,16 @@ struct ContentView: View {
                             .frame(height: 1)
                             .padding(.horizontal, topCornerRadius)
                     }
+                    .overlay {
+                        if Defaults[.timerOutlineEnabled] && (timerVM.timerState == .running || timerVM.timerState == .paused) {
+                            TimerOutlineView(
+                                topCornerRadius: topCornerRadius,
+                                bottomCornerRadius: ((vm.notchState == .open) && Defaults[.cornerRadiusScaling])
+                                    ? cornerRadiusInsets.opened.bottom
+                                    : cornerRadiusInsets.closed.bottom
+                            )
+                        }
+                    }
                     .shadow(
                         color: ((vm.notchState == .open || isHovering) && Defaults[.enableShadow])
                             ? .black.opacity(0.7) : .clear, radius: 6
@@ -294,7 +304,6 @@ struct ContentView: View {
     @ViewBuilder
     func NotchLayout() -> some View {
         VStack(alignment: .leading) {
-            // DEBUG: Blue border on outer VStack
             VStack(alignment: .leading) {
                 if coordinator.helloAnimationRunning {
                     Spacer()
@@ -310,7 +319,7 @@ struct ContentView: View {
                     // Alert takes highest priority
                     if coordinator.alert.show && vm.notchState == .closed {
                         NotchAlertView(alert: $coordinator.alert)
-                            .frame(height: vm.effectiveClosedNotchHeight, alignment: .center)
+                            .frame(height: vm.effectiveClosedNotchHeight + 2, alignment: .center)
                     } else if coordinator.expandingView.type == .battery && coordinator.expandingView.show
                         && vm.notchState == .closed && Defaults[.showPowerStatusNotifications]
                     {
@@ -427,8 +436,7 @@ struct ContentView: View {
                         TimerView()
                     }
                 }
-                // DEBUG: Red border on tab content VStack
-                .border(Color.red, width: 2)
+                .frame(maxWidth: .infinity)
                 .transition(
                     .scale(scale: 0.8, anchor: .top)
                     .combined(with: .opacity)

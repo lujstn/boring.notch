@@ -11,6 +11,9 @@
         }
       }
     },
+    ":" : {
+
+    },
     "'Now Playing' was the only option on previous versions and works with all media apps." : {
       "localizations" : {
         "cs" : {
@@ -421,6 +424,9 @@
         }
       }
     },
+    "%lld min" : {
+
+    },
     "%lld%%" : {
       "localizations" : {
         "en" : {
@@ -436,6 +442,12 @@
           }
         }
       }
+    },
+    "+%lldm" : {
+
+    },
+    "00:00:00" : {
+
     },
     "About" : {
       "localizations" : {
@@ -1322,6 +1334,9 @@
           }
         }
       }
+    },
+    "Alert Tones" : {
+
     },
     "All-day" : {
       "localizations" : {
@@ -5286,6 +5301,9 @@
         }
       }
     },
+    "Clock" : {
+
+    },
     "Close" : {
       "localizations" : {
         "ar" : {
@@ -7412,6 +7430,9 @@
         }
       }
     },
+    "Dismiss" : {
+
+    },
     "Download" : {
       "localizations" : {
         "cs" : {
@@ -8868,6 +8889,12 @@
           }
         }
       }
+    },
+    "Enable snooze options" : {
+
+    },
+    "Enable timer" : {
+
     },
     "Enable window shadow" : {
       "localizations" : {
@@ -17093,6 +17120,15 @@
         }
       }
     },
+    "Orange" : {
+
+    },
+    "Outline color" : {
+
+    },
+    "Pause" : {
+
+    },
     "Pick a Color" : {
       "localizations" : {
         "de" : {
@@ -17250,6 +17286,9 @@
           }
         }
       }
+    },
+    "Play sound when timer ends" : {
+
     },
     "Plugged In" : {
       "localizations" : {
@@ -17462,6 +17501,9 @@
           }
         }
       }
+    },
+    "Preview sound" : {
+
     },
     "Progress bar style" : {
       "extractionState" : "stale",
@@ -18733,6 +18775,9 @@
         }
       }
     },
+    "RESET" : {
+
+    },
     "Reset to Defaults" : {
       "localizations" : {
         "de" : {
@@ -19137,6 +19182,12 @@
           }
         }
       }
+    },
+    "Resume" : {
+
+    },
+    "Ringtones" : {
+
     },
     "Running" : {
       "extractionState" : "stale",
@@ -22169,6 +22220,9 @@
         }
       }
     },
+    "Show progress outline around notch" : {
+
+    },
     "Show settings icon in notch" : {
       "localizations" : {
         "de" : {
@@ -22426,6 +22480,9 @@
           }
         }
       }
+    },
+    "Show timer in collapsed notch" : {
+
     },
     "Slider color" : {
       "localizations" : {
@@ -23004,6 +23061,12 @@
         }
       }
     },
+    "Snooze" : {
+
+    },
+    "Snooze intervals shown in alert" : {
+
+    },
     "Software updates" : {
       "localizations" : {
         "cs" : {
@@ -23115,6 +23178,9 @@
           }
         }
       }
+    },
+    "Sound" : {
+
     },
     "Speed" : {
       "extractionState" : "stale",
@@ -23340,6 +23406,12 @@
           }
         }
       }
+    },
+    "START" : {
+
+    },
+    "Stop preview" : {
+
     },
     "Stopped" : {
       "extractionState" : "stale",
@@ -23707,6 +23779,9 @@
         }
       }
     },
+    "System Sounds" : {
+
+    },
     "Time to Full Charge: %@" : {
       "localizations" : {
         "en" : {
@@ -23833,6 +23908,9 @@
           }
         }
       }
+    },
+    "Timer" : {
+
     },
     "Tint progress bar with accent color" : {
       "extractionState" : "stale",
@@ -25607,6 +25685,9 @@
         }
       }
     },
+    "Volume" : {
+
+    },
     "Welcome" : {
       "localizations" : {
         "cs" : {
@@ -25718,6 +25799,9 @@
           }
         }
       }
+    },
+    "White" : {
+
     },
     "Window Appearance" : {
       "localizations" : {

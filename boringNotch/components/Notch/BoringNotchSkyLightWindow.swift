@@ -33,7 +33,9 @@ extension SkyLightOperator {
 
 class BoringNotchSkyLightWindow: NSPanel {
     private var isSkyLightEnabled: Bool = false
-    
+    /// When true, allows this window to become key for keyboard input
+    var allowsKeyboardInput: Bool = false
+
     override init(
         contentRect: NSRect,
         styleMask: NSWindow.StyleMask,
@@ -138,14 +140,14 @@ class BoringNotchSkyLightWindow: NSPanel {
     }
     
     private var observers: Set<AnyCancellable> = []
-    
+
     private func cleanupObservers() {
         Task { @MainActor in
             self.observers.forEach { $0.cancel() }
             self.observers.removeAll()
         }
     }
-    
-    override var canBecomeKey: Bool { false }
+
+    override var canBecomeKey: Bool { allowsKeyboardInput }
     override var canBecomeMain: Bool { false }
 }

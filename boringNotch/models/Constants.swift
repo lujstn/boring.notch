@@ -350,7 +350,10 @@ extension Defaults.Keys {
     static let didClearLegacyURLCacheV1 = Key<Bool>("didClearLegacyURLCache_v1", default: false)
 
     // MARK: Timer
+    static let timerEnabled = Key<Bool>("timerEnabled", default: true)
     static let timerSoundEnabled = Key<Bool>("timerSoundEnabled", default: true)
+    static let timerSoundName = Key<String>("timerSoundName", default: "clock_Radial")
+    static let timerSoundVolume = Key<Double>("timerSoundVolume", default: 0.8)
     static let timerSnoozeEnabled = Key<Bool>("timerSnoozeEnabled", default: true)
     static let timerSnoozeIntervals = Key<[Int]>("timerSnoozeIntervals", default: [5, 10, 15])
     static let timerOutlineEnabled = Key<Bool>("timerOutlineEnabled", default: true)

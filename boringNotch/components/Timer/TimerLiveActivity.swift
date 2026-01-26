@@ -30,8 +30,9 @@ struct TimerLiveActivity: View {
                 .foregroundStyle(.orange)
                 .frame(width: 40, alignment: .trailing)
                 .lineLimit(1)
+                .padding(.trailing, 2)
         }
-        .frame(height: vm.effectiveClosedNotchHeight, alignment: .center)
+        .frame(height: vm.effectiveClosedNotchHeight + 2, alignment: .center)
         .opacity(timerVM.timerState == .paused ? 0.5 : 1.0)
     }
 }

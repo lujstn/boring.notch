@@ -37,17 +37,17 @@ struct TimerCountdownView: View {
                 }
                 .buttonStyle(.plain)
 
-                // Stop button
+                // Cancel button
                 Button(action: {
                     timerVM.stop()
                 }) {
                     HStack(spacing: 4) {
-                        Image(systemName: "stop.fill")
-                            .font(.system(size: 12))
-                        Text("Stop")
+                        Image(systemName: "xmark")
+                            .font(.system(size: 11, weight: .semibold))
+                        Text("Cancel")
                             .font(.system(size: 13))
                     }
-                    .foregroundStyle(.orange)
+                    .foregroundStyle(.secondary)
                 }
                 .buttonStyle(.plain)
             }

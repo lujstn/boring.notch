@@ -16,6 +16,7 @@ struct TimerView: View {
     @State private var selectedMinutes: Int = 5
     @State private var selectedSeconds: Int = 0
     @State private var editingColumn: Int? = nil
+    @State private var didRestoreFromPending: Bool = false
 
     var body: some View {
         HStack(alignment: .top, spacing: 15) {
@@ -30,26 +31,53 @@ struct TimerView: View {
                 editingColumn = nil
             }
         }
-        // DEBUG: Green border on TimerView root
-        .border(Color.green, width: 2)
         .transition(.opacity)
         .blur(radius: vm.notchState == .closed ? 30 : 0)
+        .onAppear {
+            // Restore pending values if within 20 seconds of last change
+            if timerVM.hasPendingTime && !didRestoreFromPending {
+                selectedHours = timerVM.pendingHours
+                selectedMinutes = timerVM.pendingMinutes
+                selectedSeconds = timerVM.pendingSeconds
+                didRestoreFromPending = true
+            }
+        }
+        .onChange(of: selectedHours) { _, _ in savePendingTime() }
+        .onChange(of: selectedMinutes) { _, _ in savePendingTime() }
+        .onChange(of: selectedSeconds) { _, _ in savePendingTime() }
+        .background(GeometryReader { geo in
+            Color.clear.onAppear {
+                print("[DEBUG TimerView] size: \(geo.size), frame: \(geo.frame(in: .global))")
+            }.onChange(of: geo.size) { old, new in
+                print("[DEBUG TimerView] size changed: \(old) -> \(new)")
+            }
+        })
     }
 
     @ViewBuilder
     private var timerContent: some View {
-        switch timerVM.timerState {
-        case .idle:
-            idleView
-        case .running, .paused:
-            TimerCountdownView()
-        case .finished:
-            TimerFinishedView()
+        Group {
+            switch timerVM.timerState {
+            case .idle:
+                idleView
+                    .transition(.blurReplace)
+            case .running, .paused:
+                TimerCountdownView()
+                    .transition(.blurReplace)
+            case .finished:
+                TimerFinishedView()
+                    .transition(.blurReplace)
+            }
         }
+        .animation(.snappy(duration: 0.25), value: timerVM.timerState)
     }
 
     private var hasChanges: Bool {
         selectedHours != 0 || selectedMinutes != 5 || selectedSeconds != 0
+    }
+
+    private func savePendingTime() {
+        timerVM.savePendingTime(hours: selectedHours, minutes: selectedMinutes, seconds: selectedSeconds)
     }
 
     private var canStart: Bool {
@@ -57,15 +85,16 @@ struct TimerView: View {
     }
 
     private var idleView: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 9) {
             TimerPickerView(
                 hours: $selectedHours,
                 minutes: $selectedMinutes,
                 seconds: $selectedSeconds,
                 editingColumn: $editingColumn
             )
-            // DEBUG: Yellow border on TimerPickerView
-            .border(Color.yellow, width: 1)
+            .background(GeometryReader { geo in
+                Color.clear.onAppear { print("[DEBUG] TimerPickerView height: \(geo.size.height)") }
+            })
 
             HStack(spacing: 32) {
                 // Reset button
@@ -88,6 +117,7 @@ struct TimerView: View {
 
                 // Start button
                 Button(action: {
+                    timerVM.clearPendingTime()
                     timerVM.start(
                         hours: selectedHours,
                         minutes: selectedMinutes,
@@ -107,6 +137,12 @@ struct TimerView: View {
                 .disabled(!canStart)
                 .animation(.easeOut(duration: 0.12), value: canStart)
             }
+            .background(GeometryReader { geo in
+                Color.clear.onAppear { print("[DEBUG] Button row height: \(geo.size.height)") }
+            })
         }
+        .background(GeometryReader { geo in
+            Color.clear.onAppear { print("[DEBUG] idleView total height: \(geo.size.height)") }
+        })
     }
 }

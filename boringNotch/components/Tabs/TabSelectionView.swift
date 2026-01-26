@@ -5,6 +5,7 @@
 //  Created by Hugo Persson on 2024-08-25.
 //
 
+import Defaults
 import SwiftUI
 
 struct TabModel: Identifiable {
@@ -14,18 +15,28 @@ struct TabModel: Identifiable {
     let view: NotchViews
 }
 
-let tabs = [
-    TabModel(label: "Home", icon: "house.fill", view: .home),
-    TabModel(label: "Shelf", icon: "tray.fill", view: .shelf),
-    TabModel(label: "Timer", icon: "timer", view: .timer)
-]
-
 struct TabSelectionView: View {
     @ObservedObject var coordinator = BoringViewCoordinator.shared
+    @Default(.boringShelf) var shelfEnabled
+    @Default(.timerEnabled) var timerEnabled
     @Namespace var animation
+
+    private var visibleTabs: [TabModel] {
+        var tabs = [
+            TabModel(label: "Home", icon: "house.fill", view: .home)
+        ]
+        if shelfEnabled {
+            tabs.append(TabModel(label: "Shelf", icon: "tray.fill", view: .shelf))
+        }
+        if timerEnabled {
+            tabs.append(TabModel(label: "Timer", icon: "timer", view: .timer))
+        }
+        return tabs
+    }
+
     var body: some View {
         HStack(spacing: 0) {
-            ForEach(tabs) { tab in
+            ForEach(visibleTabs) { tab in
                     TabButton(label: tab.label, icon: tab.icon, selected: coordinator.currentView == tab.view) {
                         withAnimation(.smooth) {
                             coordinator.currentView = tab.view
@@ -48,6 +59,18 @@ struct TabSelectionView: View {
             }
         }
         .clipShape(Capsule())
+        .onChange(of: shelfEnabled) { _, enabled in
+            // Redirect to home if shelf is disabled while viewing it
+            if !enabled && coordinator.currentView == .shelf {
+                coordinator.currentView = .home
+            }
+        }
+        .onChange(of: timerEnabled) { _, enabled in
+            // Redirect to home if timer is disabled while viewing it
+            if !enabled && coordinator.currentView == .timer {
+                coordinator.currentView = .home
+            }
+        }
     }
 }
 
