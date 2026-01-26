@@ -12,14 +12,11 @@ struct TimerCountdownView: View {
 
     var body: some View {
         VStack(spacing: 10) {
-            // Large countdown display
             Text(timerVM.formattedTime)
                 .font(.system(size: 36, weight: .light, design: .monospaced))
                 .foregroundStyle(Color.orange)
 
-            // Control buttons
             HStack(spacing: 24) {
-                // Pause/Resume button
                 Button(action: {
                     if timerVM.timerState == .running {
                         timerVM.pause()
@@ -37,7 +34,6 @@ struct TimerCountdownView: View {
                 }
                 .buttonStyle(.plain)
 
-                // Cancel button
                 Button(action: {
                     timerVM.stop()
                 }) {

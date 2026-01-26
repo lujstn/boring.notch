@@ -26,7 +26,6 @@ struct TimerView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .contentShape(Rectangle())
         .onTapGesture {
-            // Tap outside picker clears editing state
             if editingColumn != nil {
                 editingColumn = nil
             }
@@ -45,13 +44,6 @@ struct TimerView: View {
         .onChange(of: selectedHours) { _, _ in savePendingTime() }
         .onChange(of: selectedMinutes) { _, _ in savePendingTime() }
         .onChange(of: selectedSeconds) { _, _ in savePendingTime() }
-        .background(GeometryReader { geo in
-            Color.clear.onAppear {
-                print("[DEBUG TimerView] size: \(geo.size), frame: \(geo.frame(in: .global))")
-            }.onChange(of: geo.size) { old, new in
-                print("[DEBUG TimerView] size changed: \(old) -> \(new)")
-            }
-        })
     }
 
     @ViewBuilder
@@ -92,12 +84,8 @@ struct TimerView: View {
                 seconds: $selectedSeconds,
                 editingColumn: $editingColumn
             )
-            .background(GeometryReader { geo in
-                Color.clear.onAppear { print("[DEBUG] TimerPickerView height: \(geo.size.height)") }
-            })
 
             HStack(spacing: 32) {
-                // Reset button
                 Button(action: {
                     selectedHours = 0
                     selectedMinutes = 5
@@ -115,7 +103,6 @@ struct TimerView: View {
                 .disabled(!hasChanges)
                 .animation(.easeOut(duration: 0.12), value: hasChanges)
 
-                // Start button
                 Button(action: {
                     timerVM.clearPendingTime()
                     timerVM.start(
@@ -137,12 +124,6 @@ struct TimerView: View {
                 .disabled(!canStart)
                 .animation(.easeOut(duration: 0.12), value: canStart)
             }
-            .background(GeometryReader { geo in
-                Color.clear.onAppear { print("[DEBUG] Button row height: \(geo.size.height)") }
-            })
         }
-        .background(GeometryReader { geo in
-            Color.clear.onAppear { print("[DEBUG] idleView total height: \(geo.size.height)") }
-        })
     }
 }

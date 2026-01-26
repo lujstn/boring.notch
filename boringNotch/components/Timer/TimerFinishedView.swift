@@ -17,7 +17,6 @@ struct TimerFinishedView: View {
 
     var body: some View {
         VStack(spacing: 10) {
-            // Pulsing 00:00:00 display
             Text("00:00:00")
                 .font(.system(size: 36, weight: .light, design: .monospaced))
                 .foregroundStyle(Color.orange)
@@ -27,9 +26,7 @@ struct TimerFinishedView: View {
                     pulsingOpacity = 1.0
                 }
 
-            // Action buttons
             HStack(spacing: 12) {
-                // Dismiss button
                 Button(action: {
                     timerVM.dismiss()
                 }) {
@@ -42,7 +39,6 @@ struct TimerFinishedView: View {
                 }
                 .buttonStyle(.plain)
 
-                // Snooze buttons
                 if snoozeEnabled {
                     ForEach(snoozeIntervals, id: \.self) { interval in
                         Button(action: {

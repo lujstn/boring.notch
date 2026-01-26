@@ -60,85 +60,32 @@ struct TimerOutlineShape: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
 
-        // Start at top-left corner (just after the top edge begins curving down)
-        // This matches the NotchShape starting point
-        path.move(
-            to: CGPoint(
-                x: rect.minX,
-                y: rect.minY
-            )
-        )
+        path.move(to: CGPoint(x: rect.minX, y: rect.minY))
 
-        // Top-left quadratic curve (curving inward)
         path.addQuadCurve(
-            to: CGPoint(
-                x: rect.minX + topCornerRadius,
-                y: rect.minY + topCornerRadius
-            ),
-            control: CGPoint(
-                x: rect.minX + topCornerRadius,
-                y: rect.minY
-            )
+            to: CGPoint(x: rect.minX + topCornerRadius, y: rect.minY + topCornerRadius),
+            control: CGPoint(x: rect.minX + topCornerRadius, y: rect.minY)
         )
 
-        // Left side straight line down to bottom-left corner
-        path.addLine(
-            to: CGPoint(
-                x: rect.minX + topCornerRadius,
-                y: rect.maxY - bottomCornerRadius
-            )
-        )
+        path.addLine(to: CGPoint(x: rect.minX + topCornerRadius, y: rect.maxY - bottomCornerRadius))
 
-        // Bottom-left quadratic curve (curving outward)
         path.addQuadCurve(
-            to: CGPoint(
-                x: rect.minX + topCornerRadius + bottomCornerRadius,
-                y: rect.maxY
-            ),
-            control: CGPoint(
-                x: rect.minX + topCornerRadius,
-                y: rect.maxY
-            )
+            to: CGPoint(x: rect.minX + topCornerRadius + bottomCornerRadius, y: rect.maxY),
+            control: CGPoint(x: rect.minX + topCornerRadius, y: rect.maxY)
         )
 
-        // Bottom edge straight line
-        path.addLine(
-            to: CGPoint(
-                x: rect.maxX - topCornerRadius - bottomCornerRadius,
-                y: rect.maxY
-            )
-        )
+        path.addLine(to: CGPoint(x: rect.maxX - topCornerRadius - bottomCornerRadius, y: rect.maxY))
 
-        // Bottom-right quadratic curve (curving outward)
         path.addQuadCurve(
-            to: CGPoint(
-                x: rect.maxX - topCornerRadius,
-                y: rect.maxY - bottomCornerRadius
-            ),
-            control: CGPoint(
-                x: rect.maxX - topCornerRadius,
-                y: rect.maxY
-            )
+            to: CGPoint(x: rect.maxX - topCornerRadius, y: rect.maxY - bottomCornerRadius),
+            control: CGPoint(x: rect.maxX - topCornerRadius, y: rect.maxY)
         )
 
-        // Right side straight line up to top-right corner
-        path.addLine(
-            to: CGPoint(
-                x: rect.maxX - topCornerRadius,
-                y: rect.minY + topCornerRadius
-            )
-        )
+        path.addLine(to: CGPoint(x: rect.maxX - topCornerRadius, y: rect.minY + topCornerRadius))
 
-        // Top-right quadratic curve (curving inward)
         path.addQuadCurve(
-            to: CGPoint(
-                x: rect.maxX,
-                y: rect.minY
-            ),
-            control: CGPoint(
-                x: rect.maxX - topCornerRadius,
-                y: rect.minY
-            )
+            to: CGPoint(x: rect.maxX, y: rect.minY),
+            control: CGPoint(x: rect.maxX - topCornerRadius, y: rect.minY)
         )
 
         return path

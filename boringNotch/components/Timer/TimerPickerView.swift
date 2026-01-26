@@ -32,7 +32,6 @@ struct TimerPickerColumn: View {
     var body: some View {
         VStack(spacing: 0) {
             VStack(spacing: 0) {
-                // Top hit area (increment)
                 Rectangle()
                     .fill(Color.clear)
                     .contentShape(Rectangle())
@@ -52,7 +51,6 @@ struct TimerPickerColumn: View {
                             }
                     )
 
-                // Digit display - shows cursor when editing
                 Group {
                     if isEditing {
                         Text(inputBuffer.isEmpty ? "|" : inputBuffer)
@@ -74,7 +72,6 @@ struct TimerPickerColumn: View {
                 .animation(.easeOut(duration: 0.1), value: isEditing)
                 .animation(.easeOut(duration: 0.1), value: value)
 
-                // Bottom hit area (decrement)
                 Rectangle()
                     .fill(Color.clear)
                     .contentShape(Rectangle())
@@ -109,7 +106,6 @@ struct TimerPickerColumn: View {
                 )
             )
 
-            // Label (outside hover zone)
             Text(label)
                 .font(.system(size: 9))
                 .foregroundStyle(.tertiary)
