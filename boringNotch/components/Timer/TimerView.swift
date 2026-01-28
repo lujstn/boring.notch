@@ -13,7 +13,7 @@ struct TimerView: View {
     @ObservedObject var coordinator = BoringViewCoordinator.shared
 
     @State private var selectedHours: Int = 0
-    @State private var selectedMinutes: Int = 5
+    @State private var selectedMinutes: Int = 0
     @State private var selectedSeconds: Int = 0
     @State private var editingColumn: Int? = nil
     @State private var didRestoreFromPending: Bool = false
@@ -65,7 +65,7 @@ struct TimerView: View {
     }
 
     private var hasChanges: Bool {
-        selectedHours != 0 || selectedMinutes != 5 || selectedSeconds != 0
+        selectedHours != 0 || selectedMinutes != 0 || selectedSeconds != 0
     }
 
     private func savePendingTime() {
@@ -85,44 +85,53 @@ struct TimerView: View {
                 editingColumn: $editingColumn
             )
 
-            HStack(spacing: 32) {
+            HStack(spacing: 24) {
                 Button(action: {
-                    selectedHours = 0
-                    selectedMinutes = 5
-                    selectedSeconds = 0
+                    editingColumn = nil
+                    DispatchQueue.main.async {
+                        timerVM.clearPendingTime()
+                        timerVM.start(
+                            hours: selectedHours,
+                            minutes: selectedMinutes,
+                            seconds: selectedSeconds
+                        )
+                    }
                 }) {
-                    Text("RESET")
-                        .font(.system(size: 13, weight: .semibold))
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .foregroundStyle(hasChanges ? .white : .gray.opacity(0.5))
-                        .background(Color.gray.opacity(hasChanges ? 0.3 : 0.15))
-                        .clipShape(RoundedRectangle(cornerRadius: 6))
-                }
-                .buttonStyle(.plain)
-                .disabled(!hasChanges)
-                .animation(.easeOut(duration: 0.12), value: hasChanges)
-
-                Button(action: {
-                    timerVM.clearPendingTime()
-                    timerVM.start(
-                        hours: selectedHours,
-                        minutes: selectedMinutes,
-                        seconds: selectedSeconds
-                    )
-                }) {
-                    Text("START")
-                        .font(.system(size: 13, weight: .semibold))
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 4)
-                        .foregroundStyle(.white)
-                        .background(Color.green.opacity(0.8))
-                        .clipShape(RoundedRectangle(cornerRadius: 6))
-                        .opacity(canStart ? 1.0 : 0.5)
+                    HStack(spacing: 4) {
+                        Image(systemName: "play.fill")
+                            .font(.system(size: 12))
+                        Text("Start")
+                            .font(.system(size: 13))
+                    }
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 4)
+                    .background(Color.green.opacity(canStart ? 0.8 : 0.3))
+                    .clipShape(RoundedRectangle(cornerRadius: 6))
+                    .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 .disabled(!canStart)
                 .animation(.easeOut(duration: 0.12), value: canStart)
+
+                Button(action: {
+                    selectedHours = 0
+                    selectedMinutes = 0
+                    selectedSeconds = 0
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 11, weight: .semibold))
+                        Text("Clear")
+                            .font(.system(size: 13))
+                    }
+                    .foregroundStyle(.secondary)
+                    .opacity(hasChanges ? 1.0 : 0.75)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .disabled(!hasChanges)
+                .animation(.easeOut(duration: 0.12), value: hasChanges)
             }
         }
     }

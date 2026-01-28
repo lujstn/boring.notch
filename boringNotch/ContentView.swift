@@ -319,7 +319,7 @@ struct ContentView: View {
                     // Alert takes highest priority
                     if coordinator.alert.show && vm.notchState == .closed {
                         NotchAlertView(alert: $coordinator.alert)
-                            .frame(height: vm.effectiveClosedNotchHeight + 2, alignment: .center)
+                            .frame(height: vm.effectiveClosedNotchHeight, alignment: .center)
                     } else if coordinator.expandingView.type == .battery && coordinator.expandingView.show
                         && vm.notchState == .closed && Defaults[.showPowerStatusNotifications]
                     {

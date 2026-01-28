@@ -143,7 +143,24 @@ enum MusicPlayerImageSizes {
         {
             notchWidth = screen.frame.width - topLeftNotchpadding - topRightNotchpadding + 4
         }
-        notchHeight = screen.safeAreaInsets.top > 0 ? Defaults[.notchHeight] : Defaults[.nonNotchHeight]
+
+        // Check if the Mac has a notch
+        if screen.safeAreaInsets.top > 0 {
+            // This is a display WITH a notch - use notch height settings
+            notchHeight = Defaults[.notchHeight]
+            if Defaults[.notchHeightMode] == .matchRealNotchSize {
+                // Add 1px adjustment for visual alignment (similar to +4 width adjustment)
+                notchHeight = screen.safeAreaInsets.top + 1
+            } else if Defaults[.notchHeightMode] == .matchMenuBar {
+                notchHeight = screen.frame.maxY - screen.visibleFrame.maxY
+            }
+        } else {
+            // This is a display WITHOUT a notch - use non-notch height settings
+            notchHeight = Defaults[.nonNotchHeight]
+            if Defaults[.nonNotchHeightMode] == .matchMenuBar {
+                notchHeight = screen.frame.maxY - screen.visibleFrame.maxY
+            }
+        }
     }
 
     return .init(width: notchWidth, height: notchHeight)

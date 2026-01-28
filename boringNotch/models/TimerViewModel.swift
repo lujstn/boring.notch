@@ -108,10 +108,14 @@ class TimerViewModel: ObservableObject {
         startTimer()
     }
 
+    func reset() {
+        guard timerState == .paused else { return }
+        remainingSeconds = totalSeconds
+    }
+
     func stop() {
         timerCancellable?.cancel()
         TimerSoundPlayer.shared.stop()
-        // Dismiss alert if showing (edge case: stopped while alert visible)
         BoringViewCoordinator.shared.dismissAlert()
         timerState = .idle
         totalSeconds = 0
@@ -124,7 +128,7 @@ class TimerViewModel: ObservableObject {
         // Dismiss alert first
         BoringViewCoordinator.shared.dismissAlert()
         let additional = minutes * 60
-        totalSeconds = additional
+        totalSeconds += additional
         remainingSeconds = additional
         timerState = .running
         startTimer()
