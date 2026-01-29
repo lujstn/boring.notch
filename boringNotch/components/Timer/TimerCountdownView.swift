@@ -74,7 +74,7 @@ struct TimerCountdownView: View {
                     }
                 }
                 .animation(.snappy(duration: 0.25), value: timerVM.timerState)
-                .padding(.top, 10)
+                .padding(.top, 15)
                 
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

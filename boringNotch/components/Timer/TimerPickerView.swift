@@ -102,7 +102,8 @@ struct TimerPickerColumn: View {
                     onCharacter: handleCharacter,
                     onEnter: commitValue,
                     onEscape: cancelEditing,
-                    onTab: handleTab
+                    onTab: handleTab,
+                    onClickOutside: commitValue
                 )
             )
 
@@ -209,6 +210,7 @@ struct KeyboardInputView: NSViewRepresentable {
     let onEnter: () -> Void
     let onEscape: () -> Void
     let onTab: (Bool) -> Void  // Bool indicates shift+tab (backwards)
+    let onClickOutside: () -> Void
 
     func makeNSView(context: Context) -> NSView {
         let view = KeyboardCaptureNSView()
@@ -216,6 +218,7 @@ struct KeyboardInputView: NSViewRepresentable {
         view.onEnter = onEnter
         view.onEscape = onEscape
         view.onTab = onTab
+        view.onClickOutside = onClickOutside
         return view
     }
 
@@ -226,6 +229,7 @@ struct KeyboardInputView: NSViewRepresentable {
         view.onEnter = onEnter
         view.onEscape = onEscape
         view.onTab = onTab
+        view.onClickOutside = onClickOutside
     }
 }
 
@@ -244,8 +248,10 @@ class KeyboardCaptureNSView: NSView {
     var onEnter: (() -> Void)?
     var onEscape: (() -> Void)?
     var onTab: ((Bool) -> Void)?  // Bool indicates shift+tab (backwards)
+    var onClickOutside: (() -> Void)?
 
-    private var eventMonitor: Any?
+    private var keyboardMonitor: Any?
+    private var mouseMonitor: Any?
 
     private func enableKeyboardInput() {
         guard let window = self.window else { return }
@@ -270,7 +276,7 @@ class KeyboardCaptureNSView: NSView {
     }
 
     private func setupEventMonitor() {
-        eventMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+        keyboardMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
             guard let self = self, self.isActiveForInput else {
                 return event
             }
@@ -292,12 +298,33 @@ class KeyboardCaptureNSView: NSView {
 
             return event
         }
+
+        mouseMonitor = NSEvent.addLocalMonitorForEvents(matching: .leftMouseDown) { [weak self] event in
+            guard let self = self, self.isActiveForInput, let window = self.window else {
+                return event
+            }
+
+            // Convert click location to view coordinates
+            let locationInWindow = event.locationInWindow
+            let locationInView = self.convert(locationInWindow, from: nil)
+
+            // Check if click is outside this view's bounds
+            if !self.bounds.contains(locationInView) {
+                self.onClickOutside?()
+            }
+
+            return event
+        }
     }
 
     private func removeEventMonitor() {
-        if let monitor = eventMonitor {
+        if let monitor = keyboardMonitor {
             NSEvent.removeMonitor(monitor)
-            eventMonitor = nil
+            keyboardMonitor = nil
+        }
+        if let monitor = mouseMonitor {
+            NSEvent.removeMonitor(monitor)
+            mouseMonitor = nil
         }
     }
 
