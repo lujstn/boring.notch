@@ -19,11 +19,7 @@ struct TimerView: View {
     @State private var didRestoreFromPending: Bool = false
 
     var body: some View {
-        HStack(alignment: .top, spacing: 15) {
-            timerContent
-                .frame(maxHeight: .infinity)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        timerContent
         .contentShape(Rectangle())
         .onTapGesture {
             if editingColumn != nil {
@@ -77,15 +73,17 @@ struct TimerView: View {
     }
 
     private var idleView: some View {
-        VStack(spacing: 9) {
-            TimerPickerView(
-                hours: $selectedHours,
-                minutes: $selectedMinutes,
-                seconds: $selectedSeconds,
-                editingColumn: $editingColumn
-            )
+        VStack {
+            VStack(spacing: 18) { // controls space between items
+                TimerPickerView(
+                    hours: $selectedHours,
+                    minutes: $selectedMinutes,
+                    seconds: $selectedSeconds,
+                    editingColumn: $editingColumn
+                )
+                .padding(.top, 3) // controls where first item starts
 
-            HStack(spacing: 24) {
+                HStack(spacing: 24) {
                 Button(action: {
                     editingColumn = nil
                     DispatchQueue.main.async {
@@ -132,7 +130,11 @@ struct TimerView: View {
                 .buttonStyle(.plain)
                 .disabled(!hasChanges)
                 .animation(.easeOut(duration: 0.12), value: hasChanges)
+                }
             }
+
+            Spacer()
         }
+        .frame(maxHeight: .infinity)
     }
 }

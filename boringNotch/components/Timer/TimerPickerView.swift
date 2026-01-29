@@ -35,7 +35,7 @@ struct TimerPickerColumn: View {
                 Rectangle()
                     .fill(Color.clear)
                     .contentShape(Rectangle())
-                    .frame(width: hoverWidth, height: 32)
+                    .frame(width: hoverWidth, height: 20)
                     .overlay(alignment: .bottom) {
                         Image(systemName: "chevron.up")
                             .font(.system(size: 10, weight: .semibold))
@@ -75,7 +75,7 @@ struct TimerPickerColumn: View {
                 Rectangle()
                     .fill(Color.clear)
                     .contentShape(Rectangle())
-                    .frame(width: hoverWidth, height: 32)
+                    .frame(width: hoverWidth, height: 20)
                     .overlay(alignment: .top) {
                         Image(systemName: "chevron.down")
                             .font(.system(size: 10, weight: .semibold))
