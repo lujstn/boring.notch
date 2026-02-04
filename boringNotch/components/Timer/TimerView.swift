@@ -74,14 +74,14 @@ struct TimerView: View {
 
     private var idleView: some View {
         VStack {
-            VStack(spacing: 18) { // controls space between items
+            VStack(spacing: 18) {
                 TimerPickerView(
                     hours: $selectedHours,
                     minutes: $selectedMinutes,
                     seconds: $selectedSeconds,
                     editingColumn: $editingColumn
                 )
-                .padding(.top, 3) // controls where first item starts
+                .padding(.top, 3)
 
                 HStack(spacing: 24) {
                 Button(action: {

@@ -9,8 +9,8 @@ import SwiftUI
 
 /// Style for alert action buttons
 enum AlertActionStyle {
-    case primary    // Filled button (main action)
-    case secondary  // Outlined/text button (alternative actions)
+    case primary
+    case secondary
 }
 
 /// An action button within a NotchAlert

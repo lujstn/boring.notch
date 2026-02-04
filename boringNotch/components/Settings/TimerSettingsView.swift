@@ -148,7 +148,6 @@ struct TimerSettingsView: View {
         .accentColor(.effectiveAccent)
         .navigationTitle("Timer")
         .onChange(of: soundName) { _, _ in
-            // Stop preview when sound selection changes
             TimerSoundPlayer.shared.stop()
             isPreviewPlaying = false
         }
@@ -158,7 +157,6 @@ struct TimerSettingsView: View {
             isPreviewPlaying = false
         }
         .onAppear {
-            // Validate sound selection - reset to default if invalid
             if TimerSoundPlayer.sound(forId: soundName) == nil {
                 soundName = "clock_Radial"
             }

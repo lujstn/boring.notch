@@ -22,7 +22,6 @@ extension SkyLightOperator {
             return
         }
         
-        // Remove the window from the SkyLight space
         _ = SLSRemoveWindowsFromSpaces(
             connection,
             [window.windowNumber] as CFArray,
@@ -66,15 +65,14 @@ class BoringNotchSkyLightWindow: NSPanel {
         
         // Force dark appearance regardless of system setting
         appearance = NSAppearance(named: .darkAqua)
-        
+
         updateCollectionBehavior()
-        
+
         // Apply initial sharing type setting
         updateSharingType()
     }
     
     private func setupObservers() {
-        // Listen for changes to the hideFromScreenRecording setting
         Defaults.publisher(.hideFromScreenRecording)
             .sink { [weak self] _ in
                 self?.updateSharingType()

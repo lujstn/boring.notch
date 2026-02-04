@@ -91,10 +91,8 @@ class TimerSoundPlayer {
 
     /// Available alert tones (shorter, one-shot)
     static let alertTones: [TimerSound] = [
-        // Modern
         "Aurora", "Bamboo", "Chord", "Circles", "Complete",
         "Hello", "Input", "Keys", "Note", "Popcorn", "Pulse", "Synth",
-        // Classic
         "Anticipate", "Bell", "Bloom", "Calypso", "Chime",
         "Descent", "Ding", "Electronic", "Fanfare", "Glass",
         "Horn", "Ladder", "Minuet", "Noir", "Spell",
@@ -108,12 +106,10 @@ class TimerSoundPlayer {
         "Purr", "Sosumi", "Submarine", "Tink"
     ].map { TimerSound(id: "system_\($0)", name: $0, category: .systemSounds) }
 
-    /// All sounds grouped by category
     static var allSounds: [TimerSound] {
         clockSounds + ringtones + alertTones + systemSounds
     }
 
-    /// Find a sound by its ID
     static func sound(forId id: String) -> TimerSound? {
         allSounds.first { $0.id == id }
     }
@@ -123,13 +119,11 @@ class TimerSoundPlayer {
 
     private init() {}
 
-    /// Play the configured timer sound
     func playTimerSound() {
         let soundId = Defaults[.timerSoundName]
         let volume = Defaults[.timerSoundVolume]
 
         guard let sound = Self.sound(forId: soundId) else {
-            // Fallback to system beep
             NSSound.beep()
             return
         }
@@ -139,7 +133,6 @@ class TimerSoundPlayer {
         play(sound: sound, volume: Float(volume), loop: shouldLoop)
     }
 
-    /// Play a specific sound
     func play(sound: TimerSound, volume: Float, loop: Bool = false) {
         stop()
 
@@ -163,7 +156,6 @@ class TimerSoundPlayer {
         play(sound: sound, volume: Float(volume), loop: false)
     }
 
-    /// Stop any playing sound
     func stop() {
         currentSound?.stop()
         currentSound = nil

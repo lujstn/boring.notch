@@ -19,19 +19,16 @@ struct TimerLiveActivity: View {
 
     var body: some View {
         HStack {
-            // Left: Timer icon
             Image(systemName: "timer")
                 .font(.system(size: max(13, vm.effectiveClosedNotchHeight - 19), weight: .medium))
                 .foregroundStyle(.orange)
                 .frame(width: 24, height: 24, alignment: .center)
                 .offset(y: -1)
 
-            // Center: Black rectangle spacer
             Rectangle()
                 .fill(.black)
                 .frame(width: vm.closedNotchSize.width)
 
-            // Right: Remaining time - fixed width for text
             Text(timerVM.compactTime)
                 .font(.system(size: 12, weight: .medium, design: .monospaced))
                 .foregroundStyle(.orange)

@@ -14,7 +14,6 @@ struct NotchAlertView: View {
 
     var body: some View {
         HStack(spacing: 10) {
-            // Icon
             Image(systemName: alert.icon)
                 .font(.system(size: 16, weight: .medium))
                 .foregroundStyle(alert.accentColor)
@@ -26,19 +25,16 @@ struct NotchAlertView: View {
                     value: isPulsing
                 )
 
-            // Title
             Text(alert.title)
                 .font(.system(size: 14, weight: .medium))
                 .foregroundStyle(.white)
 
-            // Message
             Text(alert.message)
                 .font(.system(size: 14, weight: .regular, design: .monospaced))
                 .foregroundStyle(alert.accentColor)
 
             Spacer()
 
-            // Action buttons
             HStack(spacing: 6) {
                 ForEach(alert.actions) { action in
                     Button(action: {

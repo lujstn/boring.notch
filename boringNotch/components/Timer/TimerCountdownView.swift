@@ -18,7 +18,6 @@ struct TimerCountdownView: View {
                 .frame(maxWidth: .infinity)
 
             HStack(spacing: timerVM.timerState == .paused ? 6 : -4) {
-                    // Play/Pause - always present, icon animates in place
                     Button(action: {
                         if timerVM.timerState == .running {
                             timerVM.pause()
@@ -40,7 +39,6 @@ struct TimerCountdownView: View {
                     .buttonStyle(.plain)
 
                     HStack(spacing: 14) {
-                        // Reset - always visible, dimmed when not paused
                         Button(action: {
                             timerVM.reset()
                         }) {
@@ -57,7 +55,6 @@ struct TimerCountdownView: View {
                         .buttonStyle(.plain)
                         .disabled(timerVM.timerState != .paused)
 
-                        // Cancel - always present
                         Button(action: {
                             timerVM.stop()
                         }) {

@@ -145,7 +145,6 @@ struct TimerPickerColumn: View {
 
     private func commitValue() {
         if let newValue = Int(inputBuffer) {
-            // Clamp to range
             value = min(max(newValue, range.lowerBound), range.upperBound)
         }
         editingColumn.wrappedValue = nil
@@ -153,13 +152,11 @@ struct TimerPickerColumn: View {
     }
 
     private func commitAndAdvance() {
-        // Commit current value
         if let newValue = Int(inputBuffer) {
             value = min(max(newValue, range.lowerBound), range.upperBound)
         }
         inputBuffer = ""
 
-        // Move to next column (or end if on last column)
         let nextColumn = columnIndex < totalColumns - 1 ? columnIndex + 1 : nil
         editingColumn.wrappedValue = nextColumn
     }
@@ -182,7 +179,6 @@ struct TimerPickerColumn: View {
     }
 
     private func handleTab(backwards: Bool) {
-        // Commit any pending input first
         if !inputBuffer.isEmpty {
             if let newValue = Int(inputBuffer) {
                 value = min(max(newValue, range.lowerBound), range.upperBound)
@@ -190,7 +186,6 @@ struct TimerPickerColumn: View {
             inputBuffer = ""
         }
 
-        // Calculate next column index
         let nextColumn: Int
         if backwards {
             nextColumn = columnIndex > 0 ? columnIndex - 1 : totalColumns - 1
@@ -198,7 +193,6 @@ struct TimerPickerColumn: View {
             nextColumn = columnIndex < totalColumns - 1 ? columnIndex + 1 : 0
         }
 
-        // Move to next column
         editingColumn.wrappedValue = nextColumn
     }
 }
@@ -256,14 +250,12 @@ class KeyboardCaptureNSView: NSView {
     private func enableKeyboardInput() {
         guard let window = self.window else { return }
 
-        // Enable key window capability on the notch window
         if let notchWindow = window as? BoringNotchWindow {
             notchWindow.allowsKeyboardInput = true
         } else if let skyLightWindow = window as? BoringNotchSkyLightWindow {
             skyLightWindow.allowsKeyboardInput = true
         }
 
-        // Make window key to receive keyboard events
         window.makeKey()
         setupEventMonitor()
     }
@@ -304,11 +296,9 @@ class KeyboardCaptureNSView: NSView {
                 return event
             }
 
-            // Convert click location to view coordinates
             let locationInWindow = event.locationInWindow
             let locationInView = self.convert(locationInWindow, from: nil)
 
-            // Check if click is outside this view's bounds
             if !self.bounds.contains(locationInView) {
                 self.onClickOutside?()
             }

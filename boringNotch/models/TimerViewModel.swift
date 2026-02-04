@@ -125,7 +125,6 @@ class TimerViewModel: ObservableObject {
     func snooze(minutes: Int) {
         guard timerState == .finished else { return }
         TimerSoundPlayer.shared.stop()
-        // Dismiss alert first
         BoringViewCoordinator.shared.dismissAlert()
         let additional = minutes * 60
         totalSeconds += additional
@@ -137,7 +136,6 @@ class TimerViewModel: ObservableObject {
     func dismiss() {
         timerCancellable?.cancel()
         TimerSoundPlayer.shared.stop()
-        // Dismiss alert
         BoringViewCoordinator.shared.dismissAlert()
         timerState = .idle
         totalSeconds = 0
@@ -167,7 +165,6 @@ class TimerViewModel: ObservableObject {
     }
 
     private func expandNotch() {
-        // Show alert when timer finishes
         showTimerFinishedAlert()
     }
 
