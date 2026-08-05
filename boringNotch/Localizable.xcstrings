@@ -3895,7 +3895,6 @@
       }
     },
     "Cancel" : {
-      "extractionState" : "stale",
       "localizations" : {
         "cs" : {
           "stringUnit" : {
@@ -5188,6 +5187,9 @@
           }
         }
       }
+    },
+    "Clear" : {
+
     },
     "Clear slot" : {
       "localizations" : {
@@ -18775,7 +18777,7 @@
         }
       }
     },
-    "RESET" : {
+    "Reset" : {
 
     },
     "Reset to Defaults" : {
@@ -23407,7 +23409,7 @@
         }
       }
     },
-    "START" : {
+    "Start" : {
 
     },
     "Stop preview" : {
